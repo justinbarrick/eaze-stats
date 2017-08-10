@@ -1,0 +1,40 @@
+<html>
+<head>
+</head>
+<body>
+<br><h1>Statistics for today:</h1>
+
+<br><br>Next eaze promo code opportunity (hour): {{ eaze.next_promo[0] }} ({{ eaze.next_promo[1] }}%)
+<br><br>Best eaze promo code opportunity (hour): {{ eaze.best_promo[0] }} ({{ eaze.best_promo[1] }}%)
+
+<br><br>Odds of promo today: {{ eaze.odds_today }}
+
+<br><br><h1>All upcoming promos today by hour:</h1>
+
+{% for hour, perc in enumerate(eaze.probability_today) %}
+    <br>{{ eaze.now.hour + hour }} - {{ perc }}%
+{% endfor %}
+
+<br><img src=/static/eaze_by_day.png><br><br>
+<img src=/static/eaze_by_hour.png><br><br>
+<img src=/static/eaze_by_hour_and_day.png>
+
+<br><br><h1>Percentage by day and hour</h1>
+{% for day, hours in enumerate(eaze.probability_by_day_and_hour) %}
+    <br><br><h3>Probability for day {{ eaze.weekdays[day] }}</h3>
+    {% for hour, perc in enumerate(hours) %}
+        <br>{{ hour }} - {{ perc }}%
+    {% endfor %}
+{% endfor %}
+
+<br><br><h1>Percentage by day</h1>
+{% for day, perc in enumerate(eaze.list_to_percentages(eaze.by_day)) %}
+    <br>{{ eaze.weekdays[day] }} - {{ perc }}%
+{% endfor %}
+
+<br><br><h1>Percentage by hour</h1>
+{% for hour, perc in enumerate(eaze.list_to_percentages(eaze.by_hour)) %}
+    <br>{{ hour }} - {{ perc }}%
+{% endfor %}
+</body>
+</html>
