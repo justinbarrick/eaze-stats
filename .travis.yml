@@ -1,7 +1,11 @@
 language: python
 python:
-  - "3.5"
+- '3.5'
 install:
-  - make build
+- make build
 script:
-  - make test
+- make test
+- pip install codacy-coverage && python-codacy-coverage -r coverage.xml
+env:
+  global:
+    secure: y2DGEAldSQtT+vHQ7sA+wuhZ3ZpqbMchUDK78KP+iWPhS6VJUbC+UotzNz7xBtTxW1qKvOTfDiZMLdWzt/fcNMvTUqOWTNpArQpw7Em7HdNYBRn/jnEElR/bRxRGb6o184nQ7Gc99ZPLILEO7cwDTICMak/Hacj/q+GZwE6MRkp+yAbZw9jPeiENBAADq4bVFpnUFTTmo8TZCaJO1XWvsVdqfMh6hV6m2XX/zzcMfcRfbUOp1LICSaNp5Sbq6JCxLo38QCZIMQroCoaZ6SVtsG0ZsW9HC207/6nEQ1QSyw8ut3KXNXNqPce6oQqWxWH8NGrlXmM69tU23XzYWNth/wVXvMD1ByJ2KaXyPHVSOqe+EJC7fQJx/hF5ObCSK8tEr13DXBzT7Ilz7USqG5x0BH8qas6KpfLAoc90XpqzxEPRwVCtRfDNhN28o3zkEvWWp0rV2Z1vcrstumLdPK/+FuX7z4bUjs836bY/MdomfuPwKd7z/UDh0FOMBCZWu7GLbIyWuFrjN9NV71qvA+Ipj+ClVhQyHboIrxviep1BcYAFz+JnsZ22wLXi/iAC0MQOU9wfzyel3YA29YoC2mDap/y9XVGJIJP9+cptNijWpLLRRbrlLzWmdkv1/8PlrGeGS6Xn44sXFs3fJ9T1rd5V/gAETlQ+6w6uVMVm8na+Euw=

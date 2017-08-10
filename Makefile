@@ -8,4 +8,4 @@ run:
 
 .PHONY: test
 test:
-	nosetests -v -s
+	nosetests -v -s --with-coverage --cover-xml-file=coverage.xml --cover-xml
