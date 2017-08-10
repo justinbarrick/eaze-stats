@@ -1,5 +1,6 @@
 import datetime
 import json
+import math
 import os
 import pytz
 
@@ -18,14 +19,23 @@ def parse_timestamp(timestamp):
 def localize(stamp):
     return pytz.utc.localize(stamp).astimezone(pytz.timezone('US/Pacific'))
 
+def tomorrow():
+    now = localize(datetime.datetime.now())
+    now = now.replace(hour=0, minute=0, second=0)
+    return now + datetime.timedelta(days=1)
+
 class EazeData:
     weekdays = [
         'sunday', 'monday', 'tuesday', 'wednesday', 'thursday',
         'friday', 'saturday'
     ]
 
-    def __init__(self, filename):
+    def __init__(self, filename, now=None, tomorrow=False):
         self.filename = filename
+        self.template = Template(open('report.jinja').read())
+        self.__now = now
+
+        self.tomorrow = tomorrow
 
     @property
     def promos(self):
@@ -39,7 +49,10 @@ class EazeData:
 
     @property
     def now(self):
-        return datetime.datetime.now()
+        if self.tomorrow:
+            return tomorrow()
+
+        return self.__now or localize(datetime.datetime.now())
 
     @property
     def duration(self):
@@ -132,7 +145,7 @@ class EazeData:
         return map(lambda c: (c / total) * 100, lst)
 
     def num_weeks(self, day):
-        return self.duration.days / 7
+        return math.ceil(self.duration.days / 7)
 
     def plot(self, func, msg, name):
         fig = plt.figure()
@@ -155,14 +168,15 @@ class EazeData:
         data = self.by_hour_and_day
         self.plot(lambda e: e.imshow(data, cmap='hot', interpolation='nearest'), 'Eaze promos by day and hour.', 'by_hour_and_day')
 
-def eaze_report(dataset):
-    eaze = EazeData(dataset)
-    eaze.plot_by_hour_and_day()
-    eaze.plot_by_day()
-    eaze.plot_by_hour()
+    def render(self):
+        return self.template.render(eaze=self, enumerate=enumerate)
 
-    template = Template(open('report.jinja').read())
-    return template.render(eaze=eaze, enumerate=enumerate)
+    def report(self):
+        self.plot_by_hour_and_day()
+        self.plot_by_day()
+        self.plot_by_hour()
+
+        return self.render()
 
 if __name__ == '__main__':
     app = Sanic()
@@ -171,6 +185,12 @@ if __name__ == '__main__':
 
     @app.route('/')
     async def index(request):
-        return html(eaze_report('eaze_dataset.json'))
+        eaze = EazeData('eaze_dataset.json')
+        return html(eaze.report())
+
+    @app.route('/tomorrow')
+    async def report_tomorrow(request):
+        eaze = EazeData('eaze_dataset.json', tomorrow=True)
+        return html(eaze.report())
 
     app.run(host='0.0.0.0', port=8888)

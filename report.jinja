@@ -1,18 +1,29 @@
+{% set day = "today" if not eaze.tomorrow else "tomorrow" %}
+
 <html>
 <head>
 </head>
 <body>
-<br><h1>Statistics for today:</h1>
+
+{% if day == "today" %}
+<a href="/tomorrow">Check out the report for tomorrow!</a>
+{% else %}
+<a href="/">Check out the report for today!</a>
+{% endif %}
+
+<br><h1>Statistics for {{ day }}:</h1>
 
 <br><br>Next eaze promo code opportunity (hour): {{ eaze.next_promo[0] }} ({{ eaze.next_promo[1] }}%)
 <br><br>Best eaze promo code opportunity (hour): {{ eaze.best_promo[0] }} ({{ eaze.best_promo[1] }}%)
 
-<br><br>Odds of promo today: {{ eaze.odds_today }}
+<br><br>Odds of promo {{ day }}: {{ eaze.odds_today }}
 
-<br><br><h1>All upcoming promos today by hour:</h1>
+<br><br><h1>All upcoming promos {{ day }} by hour:</h1>
 
 {% for hour, perc in enumerate(eaze.probability_today) %}
+    {% if perc %}
     <br>{{ eaze.now.hour + hour }} - {{ perc }}%
+    {% endif %}
 {% endfor %}
 
 <br><img src=/static/eaze_by_day.png><br><br>

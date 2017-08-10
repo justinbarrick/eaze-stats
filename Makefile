@@ -5,3 +5,7 @@ build:
 .PHONY: run
 run:
 	python eaze.py
+
+.PHONY: test
+test:
+	nosetests -v -s
