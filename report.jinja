@@ -34,7 +34,9 @@
 {% for day, hours in enumerate(eaze.probability_by_day_and_hour) %}
     <br><br><h3>Probability for day {{ eaze.weekdays[day] }}</h3>
     {% for hour, perc in enumerate(hours) %}
-        <br>{{ hour }} - {{ perc }}%
+        {% if perc %}
+            <br>{{ hour }} - {{ perc }}%
+        {% endif %}
     {% endfor %}
 {% endfor %}
 
@@ -45,7 +47,9 @@
 
 <br><br><h1>Percentage by hour</h1>
 {% for hour, perc in enumerate(eaze.list_to_percentages(eaze.by_hour)) %}
-    <br>{{ hour }} - {{ perc }}%
+    {% if perc %}
+        <br>{{ hour }} - {{ perc }}%
+    {% endif %}
 {% endfor %}
 </body>
 </html>
