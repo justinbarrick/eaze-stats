@@ -26,8 +26,8 @@ def tomorrow():
 
 class EazeData:
     weekdays = [
-        'sunday', 'monday', 'tuesday', 'wednesday', 'thursday',
-        'friday', 'saturday'
+        'monday', 'tuesday', 'wednesday', 'thursday',
+        'friday', 'saturday', 'sunday'
     ]
 
     def __init__(self, filename, now=None, tomorrow=False):
@@ -162,7 +162,7 @@ class EazeData:
         self.plot(lambda e: e.plot(self.by_hour), 'Eaze promos by hour.', 'by_hour')
 
     def plot_by_day(self):
-        self.plot(lambda e: e.plot(self.by_day), 'Eaze promos by day (Sunday == 0).', 'by_day')
+        self.plot(lambda e: e.plot(self.by_day), 'Eaze promos by day (Monday == 0).', 'by_day')
 
     def plot_by_hour_and_day(self):
         data = self.by_hour_and_day

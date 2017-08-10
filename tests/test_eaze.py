@@ -92,7 +92,7 @@ def test_eaze_promo_predictions():
     assert_equal(e.best_promo, (19, 20))
     assert_equal(e.odds_today, 50)
 
-@freeze_time(eaze.localize(datetime.datetime(2017, 8, 9, 10, 0, 0)))
+@freeze_time(eaze.localize(datetime.datetime(2017, 8, 10, 6, 30, 0)))
 def test_tomorrow():
     assert_equal(eaze.tomorrow(), eaze.localize(datetime.datetime(2017, 8, 10, 7, 0, 0)))
 
@@ -106,6 +106,15 @@ def test_eaze_today():
 @freeze_time(eaze.localize(datetime.datetime(2017, 8, 9, 10, 0, 0)))
 def test_eaze_tomorrow():
     e = eaze.EazeData('./tests/test_data/eaze_dataset.json', tomorrow=True)
-    assert_equal(e.now, eaze.localize(datetime.datetime(2017, 8, 10, 7, 0, 0)))
+    assert_equal(e.now, eaze.tomorrow())
     assert_equal(e.next_promo, (16, 10))
     assert_in('Statistics for tomorrow:', e.report())
+
+def test_localize():
+    now = eaze.localize(datetime.datetime(2017, 8, 6, 10, 0, 0))
+    assert_equal(now.weekday(), 6)
+    assert_equal(now.hour, 3)
+
+    now = eaze.localize(datetime.datetime(2017, 8, 6, 3, 0, 0))
+    assert_equal(now.weekday(), 5)
+    assert_equal(now.hour, 20)
